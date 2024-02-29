@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'preload_page_view.dart';
 
 class CarouselState {
   /// The [CarouselOptions] to create this state
@@ -7,7 +8,7 @@ class CarouselState {
 
   /// [pageController] is created using the properties passed to the constructor
   /// and can be used to control the [PageView] it is passed to.
-  PageController? pageController;
+  PreloadPageController? pageController;
 
   /// The actual index of the [PageView].
   ///

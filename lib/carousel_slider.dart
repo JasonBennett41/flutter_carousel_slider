@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'carousel_controller.dart';
 import 'carousel_options.dart';
 import 'utils.dart';
+import 'preload_page_view.dart';
+
 
 export 'carousel_controller.dart';
 export 'carousel_options.dart';
@@ -75,7 +77,7 @@ class CarouselSliderState extends State<CarouselSlider>
 
   CarouselState? carouselState;
 
-  PageController? pageController;
+  PreloadPageController? pageController;
 
   /// mode is related to why the page is being changed
   CarouselPageChangedReason mode = CarouselPageChangedReason.controller;
@@ -92,7 +94,7 @@ class CarouselSliderState extends State<CarouselSlider>
     carouselState!.itemCount = widget.itemCount;
 
     // pageController needs to be re-initialized to respond to state changes
-    pageController = PageController(
+    pageController = PreloadPageController(
       viewportFraction: options.viewportFraction,
       initialPage: carouselState!.realPage,
     );
@@ -118,7 +120,7 @@ class CarouselSliderState extends State<CarouselSlider>
         : carouselState!.initialPage;
     handleAutoPlay();
 
-    pageController = PageController(
+    pageController = PreloadPageController(
       viewportFraction: options.viewportFraction,
       initialPage: carouselState!.realPage,
     );
@@ -300,7 +302,7 @@ class CarouselSliderState extends State<CarouselSlider>
 
   @override
   Widget build(BuildContext context) {
-    return getGestureWrapper(PageView.builder(
+    return getGestureWrapper(PreloadPageView.builder(
       padEnds: widget.options.padEnds,
       scrollBehavior: ScrollConfiguration.of(context).copyWith(
         scrollbars: false,
@@ -310,7 +312,6 @@ class CarouselSliderState extends State<CarouselSlider>
           PointerDeviceKind.mouse,
         },
       ),
-      clipBehavior: widget.options.clipBehavior,
       physics: widget.options.scrollPhysics,
       scrollDirection: widget.options.scrollDirection,
       pageSnapping: widget.options.pageSnapping,
@@ -355,7 +356,7 @@ class CarouselSliderState extends State<CarouselSlider>
                 BuildContext storageContext = carouselState!
                     .pageController!.position.context.storageContext;
                 final double? previousSavedPosition =
-                    PageStorage.of(storageContext)?.readState(storageContext)
+                    PageStorage.of(storageContext).readState(storageContext)
                         as double?;
                 if (previousSavedPosition != null) {
                   itemOffset = previousSavedPosition - idx.toDouble();
