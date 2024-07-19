@@ -131,6 +131,10 @@ class CarouselSliderState extends State<CarouselSlider>
   Timer? getTimer() {
     return widget.options.autoPlay
         ? Timer.periodic(widget.options.autoPlayInterval, (_) {
+            if (!mounted) {
+              clearTimer();
+              return;
+            }
 
             final route = ModalRoute.of(context);
             if (route?.isCurrent == false) {
