@@ -11,7 +11,6 @@ import 'carousel_options.dart';
 import 'utils.dart';
 import 'preload_page_view.dart';
 
-
 export 'carousel_controller.dart';
 export 'carousel_options.dart';
 
@@ -72,6 +71,7 @@ class CarouselSliderState extends State<CarouselSlider>
     with TickerProviderStateMixin {
   final CarouselControllerImpl carouselController;
   Timer? timer;
+  bool initialized = false;
 
   CarouselOptions get options => widget.options;
 
@@ -157,7 +157,9 @@ class CarouselSliderState extends State<CarouselSlider>
 
             carouselState!.pageController!
                 .animateToPage(nextPage,
-                    duration: widget.options.autoPlayAnimationDuration,
+                    duration: (!initialized)
+                        ? Duration(milliseconds: 100)
+                        : widget.options.autoPlayAnimationDuration,
                     curve: widget.options.autoPlayCurve)
                 .then((_) => changeMode(previousReason));
           })
@@ -321,6 +323,9 @@ class CarouselSliderState extends State<CarouselSlider>
       preloadPagesCount: 5,
       key: widget.options.pageViewKey,
       onPageChanged: (int index) {
+        if (index == 1) {
+          initialized = true;
+        }
         int currentPage = getRealIndex(index + carouselState!.initialPage,
             carouselState!.realPage, widget.itemCount);
         if (widget.options.onPageChanged != null) {
